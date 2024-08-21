@@ -1,0 +1,46 @@
+.edge-context-menu {
+  display: grid;
+  place-content: center;
+  grid-area: 1/1;
+  /*  */
+  --btn-size: 3em;
+  --extra-space: 1em;
+}
+
+.edge-context-menu li {
+  display: grid;
+  place-content: center;
+  grid-area: 1/1;
+  --radius: calc(var(--btn-size) + var(--extra-space));
+  transform: translateX(calc(cos(var(--angle)) * var(--radius))) translateY(calc(sin(var(--angle) * -1) * var(--radius)));
+}
+
+.edge-context-menu li:nth-child(1) {
+  --angle: 0deg;
+}
+
+.edge-context-menu li:nth-child(2) {
+  --angle: 60deg;
+}
+
+.edge-context-menu li:nth-child(3) {
+  --angle: 120deg;
+}
+
+.edge-context-menu li:nth-child(4) {
+  --angle: 180deg;
+}
+
+.edge-context-menu li:nth-child(5) {
+  --angle: 240deg;
+}
+
+.edge-context-menu li button {
+  border-radius: 50%;
+  width: var(--btn-size);
+  height: var(--btn-size);
+  background-color: white;
+  border: 1px solid black;
+  /*  */
+  cursor: not-allowed;
+}

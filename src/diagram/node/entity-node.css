@@ -1,0 +1,38 @@
+
+/* .entity-node .react-flow__handle.target {
+  top: 50%;
+  pointer-events: none;
+  opacity: 0;
+} */
+
+.entity-node {
+  background-color: white;
+}
+
+.entity-node .react-flow__handle {
+  /* We need the position in the layout. */
+  visibility: hidden;
+}
+
+.entity-node.selected {
+  background-color: rgba(238, 58, 115, 1) ;
+}
+
+.entity-node .react-flow__handle.source {
+  top: 50%;
+  right: 50%;
+  transform: none;
+}
+
+.entity-node-toolbar {
+  user-select: none;
+}
+
+.entity-node-toolbar .react-flow__handle.source {
+  position: initial;
+  background-color: transparent;
+}
+
+.drag-handle {
+  pointer-events: all;
+}
