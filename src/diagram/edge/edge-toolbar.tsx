@@ -75,6 +75,7 @@ export function EdgeToolbar({ value }: { value: EdgeToolbarProps | null }) {
             <li>
               <button onClick={onDelete}>🗑</button>
             </li>
+            {value.waypointIndex !== null ? "Add button to delete waypoint" : ""}
           </ul>
         </div>
       </EdgeToolbarPortal>
