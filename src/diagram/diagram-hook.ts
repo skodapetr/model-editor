@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import {
   DiagramCallbacks,
@@ -30,11 +30,12 @@ export interface UseDiagramType {
 export const useDiagram = (callbacks: DiagramCallbacks): UseDiagramType => {
   const [isReady, setIsReady] = useState(false);
   const actions = useRef<DiagramActions>(noOperationDiagramActions);
+  const getActions = useCallback(() => actions.current, [actions]);
 
   return useMemo(() => {
     return {
       isReady,
-      actions: () => actions.current,
+      actions: getActions,
       callbacks,
       registerActionCallback: (handler) => {
         setIsReady(true);
