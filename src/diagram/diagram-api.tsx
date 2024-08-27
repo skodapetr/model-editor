@@ -3,35 +3,21 @@
  */
 export interface DiagramActions {
 
-  /**
-   * Return all nodes in the diagram.
-   */
   getNodes(): Node[];
 
-  /**
-   * Add or update the node.
-   */
-  setNode(node: Node): void;
+  addNodes(node: Node[]): void;
 
-  /**
-   * Remove the node.
-   */
-  removeNode(identifier: string): void;
+  updateNodes(node: Node[]): void;
 
-  /**
-   * Return all edges in the diagram.
-   */
+  removeNodes(identifier: string[]): void;
+
   getEdges(): Edge[];
 
-  /**
-   * Add or update the edge.
-   */
-  setEdge(edge: Edge): void;
+  addEdges(edge: Edge[]): void;
 
-  /**
-   * Remove the edge.
-   */
-  removeEdge(identifier: string): void;
+  updateEdges(edge: Edge[]): void;
+
+  removeEdges(identifier: string[]): void;
 
   /**
    * Set content to the diagram.
@@ -39,15 +25,9 @@ export interface DiagramActions {
    */
   setContent(nodes: Node[], edges: Edge[]): Promise<void>;
 
-  /**
-   * Move viewport to given position.
-   */
   setViewToPosition(x: number, y: number): void;
 
-  /**
-   * Move viewport so it is centered on node with given identifier.
-   */
-  focusNode(identifier: string): void;
+  centerViewToNode(identifier: string): void;
 
 }
 
@@ -117,6 +97,8 @@ export interface DiagramCallbacks {
 
   // Edge
 
+  onShowEdgeDetail: (identifier: string) => void;
+
   onEditEdge: (identifier: string) => void;
 
   onCreateEdgeProfile: (identifier: string) => void;
@@ -125,9 +107,11 @@ export interface DiagramCallbacks {
 
   onDeleteEdge: (identifier: string) => void;
 
-  // Node & Edge
+  // Connections
 
-  onCreateEdge: (sourceIdentifier: string, targetIdentifier: string, position: Position) => void;
+  onCreateConnectionToNode: (sourceIdentifier: string, targetIdentifier: string) => void;
+
+  onCreateConnectionToNothing: (sourceIdentifier: string, position: Position) => void;
 
 
 }

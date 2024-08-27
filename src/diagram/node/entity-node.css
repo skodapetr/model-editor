@@ -1,16 +1,10 @@
 
-/* .entity-node .react-flow__handle.target {
-  top: 50%;
-  pointer-events: none;
-  opacity: 0;
-} */
-
 .entity-node {
   background-color: white;
 }
 
 .entity-node .react-flow__handle {
-  /* We need the position in the layout. */
+  /* We only need the position in the layout. */
   visibility: hidden;
 }
 
@@ -18,7 +12,9 @@
   background-color: rgba(238, 58, 115, 1) ;
 }
 
-.entity-node .react-flow__handle.source {
+/* We need to move the source and target to the center of the node. */
+.entity-node .react-flow__handle.source,
+.entity-node .react-flow__handle.target {
   top: 50%;
   right: 50%;
   transform: none;
@@ -31,6 +27,10 @@
 .entity-node-toolbar .react-flow__handle.source {
   position: initial;
   background-color: transparent;
+}
+
+.entity-node-toolbar > button {
+  font-size: 1.35em;
 }
 
 .drag-handle {

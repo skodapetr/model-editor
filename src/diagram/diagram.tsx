@@ -12,7 +12,7 @@ import { ConnectionEdge } from "./edge/connection-edge";
 import { EntityNode, EntityNodeName } from "./node/entity-node";
 import { PropertyEdge, PropertyEdgeName } from "./edge/property-edge";
 import { DeveloperTools } from "./developer-tools/";
-import { EdgeContextMenu } from "./edge/edge-context-menu";
+import { EdgeToolbar } from "./edge/edge-toolbar";
 import { useDiagramController, DiagramContext } from "./diagram-controller";
 import { createLogger } from "../application/";
 import { UseDiagramType } from "./diagram-hook";
@@ -65,13 +65,18 @@ function ReactFlowDiagram(props: { diagram: UseDiagramType }) {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           connectionLineComponent={ConnectionEdge}
+          // We moved the target to center and by this we sort of simulate connection to a node.
+          // Best would be to have custom magnet, but unfortunately there is no easy way too
+          // get to the right place, see OnPointerDown at
+          // https://github.com/xyflow/xyflow/blob/main/packages/system/src/xyhandle/XYHandle.ts
+          connectionRadius={40}
         >
           <Controls />
           <MiniMap pannable zoomable />
           <Background variant={BackgroundVariant.Lines} gap={gapSize} size={1} />
           <DeveloperTools />
         </ReactFlow>
-        <EdgeContextMenu value={controller.edgeContextMenu} />
+        <EdgeToolbar value={controller.edgeToolbar} />
       </DiagramContext.Provider>
     </>
   )

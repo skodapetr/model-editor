@@ -1,5 +1,15 @@
 import { useContext, useState } from "react";
-import { Handle, Position, NodeToolbar, useStore, type NodeProps, type Node, type ReactFlowState } from "@xyflow/react";
+import {
+  Handle,
+  Position,
+  NodeToolbar,
+  useStore,
+  useConnection,
+  useUpdateNodeInternals,
+  type NodeProps,
+  type Node,
+  type ReactFlowState,
+} from "@xyflow/react";
 
 import { NodeData } from "../diagram-internal-model";
 import { DiagramContext } from "../diagram-controller";
@@ -20,7 +30,7 @@ export const EntityNode = (props: NodeProps<Node<NodeData>>) => {
 
   // We can use bellow to get information about active connection
   // and for example highligh possible targets.
-  // const connection = useConnection();
+  const connection = useConnection()
 
   // We can use props.selected to show source port.
 
@@ -37,12 +47,8 @@ export const EntityNode = (props: NodeProps<Node<NodeData>>) => {
             Content ...
           </div>
         </div>
-        {/* We just add targets on all sides. */}
-        <Handle type="target" position={Position.Top} />
+        {/* We need a permanent source and target. */}
         <Handle type="target" position={Position.Right} />
-        <Handle type="target" position={Position.Bottom} />
-        <Handle type="target" position={Position.Left} />
-        {/* We need this one as a permanent source. */}
         <Handle type="source" position={Position.Right} />
       </div>
     </>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import {
   DiagramCallbacks,
@@ -9,7 +9,11 @@ export interface UseDiagramType {
 
   isReady: boolean;
 
-  actions: DiagramActions;
+  /**
+   * Since actions are not available at time of return from,
+   * this hook we provide them using getter.
+   */
+  actions: () => DiagramActions;
 
   callbacks: DiagramCallbacks;
 
@@ -25,19 +29,19 @@ export interface UseDiagramType {
  */
 export const useDiagram = (callbacks: DiagramCallbacks): UseDiagramType => {
   const [isReady, setIsReady] = useState(false);
-  const [actions, setActions] = useState<DiagramActions>(noOperationDiagramActions);
+  const actions = useRef<DiagramActions>(noOperationDiagramActions);
 
   return useMemo(() => {
     return {
       isReady,
-      actions,
+      actions: () => actions.current,
       callbacks,
       registerActionCallback: (handler) => {
         setIsReady(true);
-        setActions(handler);
+        actions.current = handler;
       },
     };
-  }, [isReady, actions, callbacks, setIsReady, setActions]);
+  }, [isReady, actions, callbacks, setIsReady]);
 };
 
 /**
@@ -45,12 +49,14 @@ export const useDiagram = (callbacks: DiagramCallbacks): UseDiagramType => {
  */
 const noOperationDiagramActions: DiagramActions = {
   getNodes: () => [],
-  setNode: () => { },
-  removeNode: () => { },
+  addNodes: () => { },
+  updateNodes: () => { },
+  removeNodes: () => { },
   getEdges: () => [],
-  setEdge: () => { },
-  removeEdge: () => { },
+  addEdges: () => { },
+  updateEdges: () => { },
+  removeEdges: () => { },
   setContent: async () => { },
   setViewToPosition: () => { },
-  focusNode: () => { },
+  centerViewToNode: () => { },
 };

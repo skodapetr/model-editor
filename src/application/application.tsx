@@ -24,7 +24,7 @@ const nodes: Node[] = [
   }, {
     identifier: "node-002",
     iri: "dcat-ap:Catalog",
-    initialPosition: { x: 110, y: 510 },
+    initialPosition: { x: 110, y: 350 },
     label: "dcat-ap:Catalog",
     items: [],
   },
@@ -54,34 +54,51 @@ export function Application() {
   const callbacks = useMemo<DiagramCallbacks>(() => {
     return {
 
-      onShowNodeDetail: (identifier) => console.log("Application.onShowNodeDetail", arguments),
+      onShowNodeDetail: (id) => console.log("Application.onShowNodeDetail", {id}),
 
-      onEditNode: (identifier) => console.log("Application.onEditNode", arguments),
+      onEditNode: (id) => console.log("Application.onEditNode", {id}),
 
-      onCreateNodeProfile: (identifier) => console.log("Application.onCreateNodeProfile", arguments),
+      onCreateNodeProfile: (id) => console.log("Application.onCreateNodeProfile", {id}),
 
-      onHideNode: (identifier) => console.log("Application.onHideNode", arguments),
+      onHideNode: (id) => console.log("Application.onHideNode", {id}),
 
-      onDeleteNode: (identifier) => console.log("Application.onDeleteNode", arguments),
+      onDeleteNode: (id) => console.log("Application.onDeleteNode", {id}),
 
-      onEditEdge: (identifier) => console.log("Application.onEditEdge", arguments),
+      onShowEdgeDetail: (id) => console.log("Application.onShowEdgeDetail", {id}),
 
-      onCreateEdgeProfile: (identifier) => console.log("Application.onCreateEdgeProfile", arguments),
+      onEditEdge: (id) => console.log("Application.onEditEdge", {id}),
 
-      onHideEdge: (identifier) => console.log("Application.onHideEdge", arguments),
+      onCreateEdgeProfile: (id) => console.log("Application.onCreateEdgeProfile", {id}),
 
-      onDeleteEdge: (identifier) => console.log("Application.onDeleteEdge", arguments),
+      onHideEdge: (id) => console.log("Application.onHideEdge", {id}),
 
-      onCreateEdge: (sourceIdentifier, targetIdentifier, position) => console.log("Application.onCreateEdge", arguments),
+      onDeleteEdge: (id) => console.log("Application.onDeleteEdge", {id}),
+
+      onCreateConnectionToNode: (source, target) => {
+        console.log("Application.onCreateConnectionToNode", {source, target});
+        // As a default we just add an edge.
+        diagram.actions().addEdges([{
+          identifier: "edge-003",
+          source,
+          target,
+          waypoints: [],
+
+        }]);
+      },
+
+      onCreateConnectionToNothing: (source, position) => console.log("Application.onCreateConnectionToNothing", {source, position}),
 
     };
   }, []);
 
+  // We use this hook to interface with the diagram.
+  // We provide a callbacks to be called when something happen.
+  // We get back actions a function, we can call to do something with the editor.
   const diagram = useDiagram(callbacks);
 
   useEffect(() => {
     if (diagram.isReady) {
-      diagram.actions.setContent(nodes, edges);
+      diagram.actions().setContent(nodes, edges);
     }
   }, [diagram.actions, diagram.isReady])
 
@@ -91,14 +108,14 @@ export function Application() {
         Application main menu
         &nbsp;
         <button onClick={() => {
-          console.log("Add component")
-          diagram.actions.setNode({
+          // As a default we just add a node.
+          diagram.actions().addNodes([{
             identifier: "node-003",
             iri: "dcat-ap-cz:Catalog",
             initialPosition: { x: 510, y: 510 },
             label: "dcat-ap-cz:Catalog",
             items: [],
-          });
+          }]);
         }}>
           Add component
         </button>
