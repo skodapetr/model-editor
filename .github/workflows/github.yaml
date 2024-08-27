@@ -24,7 +24,8 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
-        run: npm ci
+        # Do not use in your project.
+        run: npm i
       - name: Build
         run: npm run build
       - name: Upload artifact
