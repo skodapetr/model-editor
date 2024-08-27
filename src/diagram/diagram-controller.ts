@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo, createContext } from "react";
+import React, { useCallback, useEffect, useState, useMemo, createContext } from "react";
 import {
-  addEdge,
-  useStoreApi,
   useReactFlow,
   useNodesState,
   useEdgesState,
-  useNodesInitialized,
   useOnSelectionChange,
   applyNodeChanges,
   applyEdgeChanges,
@@ -41,11 +38,9 @@ type ReactFlowContext = ReactFlowInstance<NodeType, EdgeType>;
 type OpenEdgeContextMenuHandler = (edgeId: string, waypointIndex: number | null, x: number, y: number) => void;
 
 /**
- * We use context to provide nodes, edges and other with access to actions and callbacks.
+ * We use context to acess to callbacks to diagram content, like nodes and edges.
  */
 interface DiagramContextType {
-
-  actions: DiagramActions;
 
   callbacks: DiagramCallbacks;
 
@@ -99,16 +94,16 @@ interface UseDiagramControllerType {
 };
 
 export function useDiagramController(api: UseDiagramType): UseDiagramControllerType {
-  const store = useStoreApi();
+  // We can use useStore get low level access.
   const reactFlow = useReactFlow<NodeType, EdgeType>();
   const [nodes, setNodes] = useNodesState<NodeType>([]);
   const [edges, setEdges] = useEdgesState<EdgeType>([]);
   const [edgeToolbar, setEdgeToolbar] = useState<EdgeToolbarProps | null>(null);
 
   // The initialized is set to false when new node is added and back to true once the size is determined.
-  const reactFlowInitialized = useNodesInitialized();
+  // const reactFlowInitialized = useNodesInitialized();
 
-  const onChangeSelection = useCallback(createChangeSelectionHandler(setEdgeToolbar), [setEdgeToolbar]);
+  const onChangeSelection = useCallback(createChangeSelectionHandler(), [setEdgeToolbar]);
   useOnSelectionChange({ onChange: (onChangeSelection) });
 
   const onNodesChange = useCallback(createNodesChangeHandler(setNodes), [setNodes]);
@@ -312,6 +307,10 @@ const createActions = (
     },
     centerViewToNode(identifier) {
       console.log("Diagram.focusNode", { identifier });
+      const node = reactFlow.getNode(identifier);
+      if (node !== undefined) {
+        focusNodeAction(reactFlow, node);
+      }
     },
   };
 }
@@ -348,7 +347,7 @@ const edgeToEdgeType = (edge: ApiEdge): EdgeType => {
 }
 
 /**
- * Move view to given node.
+ * Move view to given node with animation.
  * https://reactflow.dev/examples/misc/use-react-flow-hook
  */
 const focusNodeAction = (reactFlow: ReactFlowContext, node: Node) => {
@@ -360,7 +359,6 @@ const focusNodeAction = (reactFlow: ReactFlowContext, node: Node) => {
 
 const createDiagramContext = (api: UseDiagramType, onOpenEdgeContextMenu: OpenEdgeContextMenuHandler): DiagramContextType => {
   return {
-    actions: api.actions,
     callbacks: api.callbacks,
     onOpenEdgeContextMenu,
   };

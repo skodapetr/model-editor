@@ -21,8 +21,8 @@ interface VerticalSplitterProps {
  * https://phuoc.ng/collection/react-drag-drop/create-resizable-split-views/
  */
 export const VerticalSplitter = (props: VerticalSplitterProps) => {
-  const containerRef = React.useRef<HTMLElement>();
-  const leftRef = React.useRef<HTMLElement>();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const leftRef = React.useRef<HTMLDivElement>(null);
 
   console.assert(props.children.length === 2, {
     message: "Invalid number of children",
@@ -49,7 +49,7 @@ export const VerticalSplitter = (props: VerticalSplitterProps) => {
   )
 };
 
-function initialize(leftRef: React.MutableRefObject<HTMLElement | undefined>, initialSize: number = 20) {
+function initialize(leftRef: React.RefObject<HTMLElement>, initialSize: number = 20) {
   const style = leftRef?.current?.style;
   if (style === undefined) {
     return;
@@ -62,7 +62,7 @@ function initialize(leftRef: React.MutableRefObject<HTMLElement | undefined>, in
  * When move we change the style of the left thus adjusting the size.
  * When up we remove the listeners ending the action.
  */
-function createHandleMouseDown(leftRef: React.MutableRefObject<HTMLElement | undefined>, containerRef: React.MutableRefObject<HTMLElement | undefined>) {
+function createHandleMouseDown(leftRef: React.RefObject<HTMLElement>, containerRef: React.RefObject<HTMLElement>) {
   return React.useCallback((event: React.MouseEvent) => {
     const start = { x: event.clientX, y: event.clientY };
     const leftWidth = leftRef?.current?.getBoundingClientRect().width;
@@ -71,7 +71,7 @@ function createHandleMouseDown(leftRef: React.MutableRefObject<HTMLElement | und
       return;
     }
 
-    const handleMouseMove = (event: React.MouseEvent) => {
+    const handleMouseMove = (event: MouseEvent) => {
       const dx = event.clientX - start.x;
       const containerWidth = containerRef?.current?.getBoundingClientRect().width;
       const firstStyle = leftRef?.current?.style;

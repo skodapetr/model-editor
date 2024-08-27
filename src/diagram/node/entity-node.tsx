@@ -1,14 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   Handle,
   Position,
   NodeToolbar,
-  useStore,
-  useConnection,
-  useUpdateNodeInternals,
   type NodeProps,
   type Node,
-  type ReactFlowState,
 } from "@xyflow/react";
 
 import { NodeData } from "../diagram-internal-model";
@@ -18,6 +14,7 @@ import "./entity-node.css";
 
 // We can select zoom option and hide content when zoom is on given threshold.
 // const zoomSelector = (state: ReactFlowState) => state.transform[2] >= 0.9;
+// Following in the entity:
 // const showContent = useStore(zoomSelector);
 
 export const EntityNode = (props: NodeProps<Node<NodeData>>) => {
@@ -30,9 +27,7 @@ export const EntityNode = (props: NodeProps<Node<NodeData>>) => {
 
   // We can use bellow to get information about active connection
   // and for example highligh possible targets.
-  const connection = useConnection()
-
-  // We can use props.selected to show source port.
+  // const connection = useConnection()
 
   return (
     <>

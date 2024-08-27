@@ -1,8 +1,6 @@
 import React, { useCallback, useContext } from "react";
 import {
   BaseEdge,
-  getStraightPath,
-  getSmoothStepPath,
   EdgeLabelRenderer,
   useInternalNode,
   type EdgeProps,
@@ -63,10 +61,12 @@ export const PropertyEdge = (props: EdgeProps<Edge<EdgeData>>) => {
             style={{
               position: "absolute",
               transform: `translate(-50%, -50%) translate(${labelPosition.x}px,${labelPosition.y}px)`,
-              pointerEvents: "all", // We need this to make the content click-able.
+              // We need this to make the content click-able.
+              pointerEvents: "all",
               color: "black",
               backgroundColor: "white",
-              whiteSpace: "pre-line", // Line break from text, we can split into multiple component and center.
+              // Line break from text, we can split into multiple component and center.
+              whiteSpace: "pre-line",
             }}
           >
             {props.label}

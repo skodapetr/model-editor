@@ -24,13 +24,13 @@ export const createLogger = (url: string | undefined): Logger => {
 
   const looger: Logger = {
     render: (component) => {
-      console.info(`[${component}] Rendering`)
+      console.info(`[${url}:${component}] Rendering`)
     },
     error: (message, optionalParams) => {
-      console.error(message, optionalParams)
+      console.error(`[${url}]`,message, optionalParams);
     },
     missingTranslation: (name: string) => {
-      console.error("Missing translation for:", name);
+      console.error(`[${url}] Missing translation for "${name}"`);
     }
   }
   return looger;
