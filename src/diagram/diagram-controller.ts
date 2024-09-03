@@ -29,9 +29,11 @@ import { EdgeToolbarProps } from "./edge/edge-toolbar";
 import { EntityNodeName } from "./node/entity-node";
 import { PropertyEdgeName } from "./edge/property-edge";
 
-type NodeType = Node<NodeData>;
+import { type AlignmentController, useAlignmentController } from "./features/alignment-controller-v2";
 
-type EdgeType = Edge<EdgeData>;
+export type NodeType = Node<NodeData>;
+
+export type EdgeType = Edge<EdgeData>;
 
 type ReactFlowContext = ReactFlowInstance<NodeType, EdgeType>;
 
@@ -91,6 +93,12 @@ interface UseDiagramControllerType {
 
   isValidConnection: IsValidConnection<EdgeType>;
 
+
+  onNodeDrag: (event: React.MouseEvent, node: Node, nodes: Node[]) => void;
+  onNodeDragStart: (event: React.MouseEvent, node: Node, nodes: Node[]) => void;
+  onNodeDragStop: (event: React.MouseEvent, node: Node, nodes: Node[]) => void;
+
+  alignmentController: AlignmentController;
 };
 
 export function useDiagramController(api: UseDiagramType): UseDiagramControllerType {
@@ -100,13 +108,15 @@ export function useDiagramController(api: UseDiagramType): UseDiagramControllerT
   const [edges, setEdges] = useEdgesState<EdgeType>([]);
   const [edgeToolbar, setEdgeToolbar] = useState<EdgeToolbarProps | null>(null);
 
+  const alignment = useAlignmentController({ reactFlowInstance: reactFlow });
+
   // The initialized is set to false when new node is added and back to true once the size is determined.
   // const reactFlowInitialized = useNodesInitialized();
 
   const onChangeSelection = useCallback(createChangeSelectionHandler(), [setEdgeToolbar]);
   useOnSelectionChange({ onChange: (onChangeSelection) });
 
-  const onNodesChange = useCallback(createNodesChangeHandler(setNodes), [setNodes]);
+  const onNodesChange = useCallback(createNodesChangeHandler(setNodes, alignment), [setNodes, alignment]);
 
   const onEdgesChange = useCallback(createEdgesChangeHandler(setEdges), [setEdges]);
 
@@ -122,13 +132,18 @@ export function useDiagramController(api: UseDiagramType): UseDiagramControllerT
 
   const onDrop = useCallback(createDropHandler(reactFlow), [reactFlow.screenToFlowPosition]);
 
-  const actions = useMemo(() => createActions(reactFlow, setNodes, setEdges), [reactFlow, setNodes, setEdges]);
+  const actions = useMemo(() => createActions(reactFlow, setNodes, setEdges, alignment), [reactFlow, setNodes, setEdges, alignment]);
 
   const onOpenEdgeToolbar = useCallback(createOpenEdgeToolbar(setEdgeToolbar), [setEdgeToolbar]);
   const context = useMemo(() => createDiagramContext(api, onOpenEdgeToolbar), [api]);
 
   // Register actions to API.
   useEffect(() => api.registerActionCallback(actions), [api, actions]);
+
+
+  const onNodeDrag = useCallback(createOnNodeDragHandler(), []);
+  const onNodeDragStart = useCallback(createOnNodeDragStartHandler(alignment), [alignment]);
+  const onNodeDragStop = useCallback(createOnNodeDragStopHandler(alignment), [alignment]);
 
   return {
     nodes,
@@ -143,8 +158,33 @@ export function useDiagramController(api: UseDiagramType): UseDiagramControllerT
     onDragOver,
     onDrop,
     isValidConnection,
+
+    onNodeDrag,
+    onNodeDragStart,
+    onNodeDragStop,
+    alignmentController: alignment,
   };
 };
+
+
+const createOnNodeDragHandler = () => {
+  return (event: React.MouseEvent, node: Node, nodes: Node[]) => {
+    // EMPTY
+  }
+};
+
+const createOnNodeDragStartHandler = (alignment) => {
+  return (event: React.MouseEvent, node: Node, nodes: Node[]) => {
+    alignment.alignmentSetUpOnNodeDragStart(event, node);
+  }
+};
+
+const createOnNodeDragStopHandler = (alignment) => {
+  return (event: React.MouseEvent, node: Node, nodes: Node[]) => {
+    alignment.alignmentCleanUpOnNodeDragStop(node);
+  }
+};
+
 
 const createChangeSelectionHandler = () => {
   return (_: OnSelectionChangeParams) => {
@@ -160,7 +200,7 @@ const createChangeSelectionHandler = () => {
   }
 }
 
-const createNodesChangeHandler = (setNodes: React.Dispatch<React.SetStateAction<NodeType[]>>) => {
+const createNodesChangeHandler = (setNodes: React.Dispatch<React.SetStateAction<NodeType[]>>, alignment: AlignmentController) => {
   return (changes: NodeChange<NodeType>[]) => {
     // We can alter the change here ... for example allow only x-movement.
     // changes.forEach(change => {
@@ -170,6 +210,8 @@ const createNodesChangeHandler = (setNodes: React.Dispatch<React.SetStateAction<
     //     positionChange.position.y = node?.position.y;
     //   }
     // });
+
+    alignment.alignmentNodesChange(changes);
     setNodes((prevNodes) => applyNodeChanges(changes, prevNodes));
   }
 }
@@ -268,6 +310,7 @@ const createActions = (
   reactFlow: ReactFlowInstance<NodeType, EdgeType>,
   setNodes: React.Dispatch<React.SetStateAction<NodeType[]>>,
   setEdges: React.Dispatch<React.SetStateAction<EdgeType[]>>,
+  alignment: AlignmentController
 ): DiagramActions => {
   return {
     getNodes() {
@@ -299,6 +342,7 @@ const createActions = (
     },
     async setContent(nodes, edges) {
       setNodes(nodes.map(nodeToNodeType));
+      alignment.onReset();
       setEdges(edges.map(edgeToEdgeType));
       console.log("Diagram.setContent", { nodes, edges });
     },

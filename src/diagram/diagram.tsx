@@ -17,6 +17,9 @@ import { useDiagramController, DiagramContext } from "./diagram-controller";
 import { createLogger } from "../application/";
 import { UseDiagramType } from "./diagram-hook";
 
+import { configuration } from "../application/configuration";
+import { AlignmentComponent } from "./features/alignment-viewportal";
+
 export function Diagram(props: { diagram: UseDiagramType }) {
   // We use ReactFlowProvider as otherwise use of ReactFlow hooks,
   // would create multiple instance causing issues.
@@ -37,11 +40,10 @@ const edgeTypes = {
   [PropertyEdgeName]: PropertyEdge,
 }
 
-const gapSize = 20;
-
 function ReactFlowDiagram(props: { diagram: UseDiagramType }) {
   logger.render("ReactFlowDiagram");
   const controller = useDiagramController(props.diagram);
+  const { xSnapGrid, ySnapGrid } = configuration();
   return (
     <>
       <DiagramContext.Provider value={controller.context}>
@@ -59,7 +61,7 @@ function ReactFlowDiagram(props: { diagram: UseDiagramType }) {
           onConnectEnd={controller.onConnectEnd}
           onDrop={controller.onDrop}
           onDragOver={controller.onDragOver}
-          snapGrid={[gapSize, gapSize]}
+          snapGrid={[xSnapGrid, ySnapGrid]}
           snapToGrid={true}
           selectionOnDrag={true}
           nodeTypes={nodeTypes}
@@ -70,13 +72,19 @@ function ReactFlowDiagram(props: { diagram: UseDiagramType }) {
           // get to the right place, see OnPointerDown at
           // https://github.com/xyflow/xyflow/blob/main/packages/system/src/xyhandle/XYHandle.ts
           connectionRadius={40}
+
+
+          onNodeDrag={controller.onNodeDrag}
+          onNodeDragStart={controller.onNodeDragStart}
+          onNodeDragStop={controller.onNodeDragStop}
         >
           <Controls />
           <MiniMap pannable zoomable />
-          <Background variant={BackgroundVariant.Lines} gap={gapSize} size={1} />
+          <Background variant={BackgroundVariant.Lines} gap={xSnapGrid} size={1} />
           <DeveloperTools />
         </ReactFlow>
         <EdgeToolbar value={controller.edgeToolbar} />
+        <AlignmentComponent {...controller.alignmentController}></AlignmentComponent>
       </DiagramContext.Provider>
     </>
   )
