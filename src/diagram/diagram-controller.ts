@@ -173,13 +173,13 @@ const createOnNodeDragHandler = () => {
   }
 };
 
-const createOnNodeDragStartHandler = (alignment) => {
+const createOnNodeDragStartHandler = (alignment: AlignmentController) => {
   return (event: React.MouseEvent, node: Node, nodes: Node[]) => {
-    alignment.alignmentSetUpOnNodeDragStart(event, node);
+    alignment.alignmentSetUpOnNodeDragStart(node);
   }
 };
 
-const createOnNodeDragStopHandler = (alignment) => {
+const createOnNodeDragStopHandler = (alignment: AlignmentController) => {
   return (event: React.MouseEvent, node: Node, nodes: Node[]) => {
     alignment.alignmentCleanUpOnNodeDragStop(node);
   }

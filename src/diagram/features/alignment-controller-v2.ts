@@ -17,20 +17,10 @@ import { Point } from "../edge/math";
 // On a side note note I think that we should work with absolute positions, if I understand it correctly positions are relative to the parent node
 // (which equals the absolute position if there is no parent node)
 // There some places where I probably don't update the absolute position but I should (some of the commented code), so after group nodes will be added, it will have to be fixed
-const getPositionAbsoluteFromNode = (node: Node, reactFlowInstance: ReactFlowInstance<any, any>): XYPosition => {
-    return reactFlowInstance.getInternalNode(node.id).internals.positionAbsolute;
-}
-
 const getInternalNodeFromNode = (node: Node, reactFlowInstance: ReactFlowInstance<any, any>): InternalNode => {
     return reactFlowInstance.getInternalNode(node.id);
 }
 
-const changeAbsolutePositionOfNode = (node: Node, reactFlowInstance: ReactFlowInstance<any, any>, x: number, y: number) => {
-    getInternalNodeFromNode(node, reactFlowInstance).internals.positionAbsolute = {
-        x,
-        y
-    };
-}
 
 type Coordinate = "x" | "y";
 type RelevantAlignmentDataForCoordinate = {
@@ -56,7 +46,7 @@ const isInRange = (value: number, midPoint: number, range: number) => {
 
 export type AlignmentController = {
     onReset: () => void,
-    alignmentSetUpOnNodeDragStart: (event: React.MouseEvent, node: Node) => void,
+    alignmentSetUpOnNodeDragStart: (node: Node) => void,
     alignmentCleanUpOnNodeDragStop: (node: Node) => void,
     alignmentNodesChange: (changes: NodeChange<NodeType>[]) => void,
     horizontalAlignmentLine: Point | null,
@@ -87,7 +77,7 @@ export const useAlignmentController = (props: {
     };
 
 
-    const alignmentSetUpOnNodeDragStart = (event: React.MouseEvent, node: Node) => {
+    const alignmentSetUpOnNodeDragStart = (node: Node) => {
         const nodesOnCanvas = reactFlowInstance.getNodes().filter(n => n.id !== node.id)
                                                             .map(n => getInternalNodeFromNode(n, reactFlowInstance));
 
@@ -127,7 +117,6 @@ export const useAlignmentController = (props: {
         }
 
         const nodePositionChange = changes[0] as NodePositionChange;
-        const node = reactFlowInstance.getNode(nodePositionChange.id);
         if(nodePositionChange.position === undefined) {
             return;
         }
@@ -151,7 +140,7 @@ export const useAlignmentController = (props: {
         [isAlignmentNewlyOver.x, indexInSortedArray.x] = checkForAlignment(nodePositionCopy, "x", changedAlignmentLines);
         [isAlignmentNewlyOver.y, indexInSortedArray.y] = checkForAlignment(nodePositionCopy, "y", changedAlignmentLines);
 
-        const internalNode = getInternalNodeFromNode(node, reactFlowInstance);
+        // const internalNode = getInternalNodeFromNode(node, reactFlowInstance);
 
         // If we were aligning at least one node and still are
         if(changedAlignmentLines.length === 0 && (indexInSortedArray.x >= 0 || indexInSortedArray.y >= 0)) {
