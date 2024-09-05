@@ -1,7 +1,18 @@
+
 /**
- * Allow execution of actions.
+ * Actions that can be executed on the editor component.
  */
 export interface DiagramActions {
+
+  // Groups
+
+  getGroups(): Group[];
+
+  addGroup(group: Group): void;
+
+  removeGroups(groups: string[]): void;
+
+  // Nodes
 
   getNodes(): Node[];
 
@@ -9,7 +20,11 @@ export interface DiagramActions {
 
   updateNodes(node: Node[]): void;
 
+  updateNodesPosition(nodes: { [identifier: string]: Position }): void;
+
   removeNodes(identifier: string[]): void;
+
+  // Edges
 
   getEdges(): Edge[];
 
@@ -17,7 +32,19 @@ export interface DiagramActions {
 
   updateEdges(edge: Edge[]): void;
 
+  updateEdgesWaypointPosition(positions: { [identifier: string]: { [identifier: string]: Position } }): void;
+
   removeEdges(identifier: string[]): void;
+
+  // Selection
+
+  getSelectedNodes(): Node[];
+
+  setSelectedNodes(nodes: string[]): void;
+
+  getSelectedEdges(): Edge[];
+
+  setSelectedEdges(edges: string[]): void;
 
   /**
    * Set content to the diagram.
@@ -25,9 +52,22 @@ export interface DiagramActions {
    */
   setContent(nodes: Node[], edges: Edge[]): Promise<void>;
 
+  // Viewport
+
+  getView(): { position: Position, width: number, height: number };
+
   setViewToPosition(x: number, y: number): void;
 
   centerViewToNode(identifier: string): void;
+
+}
+
+/**
+ * Non-visual node used to represent group of other nodes.
+ */
+export type Group = {
+
+  identifier: string;
 
 }
 
@@ -45,6 +85,11 @@ export type Node = {
   iri: string;
 
   items: EntityItem[];
+
+  /**
+   * Group this node belongs to.
+   */
+  group: string | null;
 
 }
 
@@ -106,6 +151,10 @@ export interface DiagramCallbacks {
   onHideEdge: (identifier: string) => void;
 
   onDeleteEdge: (identifier: string) => void;
+
+  // Selection
+
+  onSelectionDidChange: (nodes: string[], edges: string[]) => void;
 
   // Connections
 

@@ -49,7 +49,8 @@ function ReactFlowDiagram(props: { diagram: UseDiagramType }) {
         <ReactFlow
           id="reactflow-diagram"
           colorMode="light"
-          connectOnClick={false} // We can allow user to click source and then the target to create a connection.
+          // We can allow user to click source and then the target to create a connection.
+          connectOnClick={false}
           nodes={controller.nodes}
           edges={controller.edges}
           onNodesChange={controller.onNodesChange}
