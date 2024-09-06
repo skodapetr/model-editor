@@ -12,6 +12,8 @@ export interface DiagramActions {
 
   removeGroups(groups: string[]): void;
 
+  extendGroup(group: Group, extension: string[]): void;
+
   // Nodes
 
   getNodes(): Node[];
@@ -32,7 +34,9 @@ export interface DiagramActions {
 
   updateEdges(edge: Edge[]): void;
 
-  updateEdgesWaypointPosition(positions: { [identifier: string]: { [identifier: string]: Position } }): void;
+  updateEdgesWaypointPosition(positions: { [identifier: string]: Position[] }): void;
+
+  straightenEdges(identifier: string[]): void;
 
   removeEdges(identifier: string[]): void;
 
