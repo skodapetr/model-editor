@@ -8,9 +8,13 @@ export interface DiagramActions {
 
   getGroups(): Group[];
 
-  addGroup(group: Group): void;
+  addGroup(group: Group, content?: string[]): void;
 
   removeGroups(groups: string[]): void;
+
+  setGroup(group: Group, content: string[]): void;
+
+  getGroupContent(group: Group): string[];
 
   // Nodes
 
@@ -32,7 +36,7 @@ export interface DiagramActions {
 
   updateEdges(edge: Edge[]): void;
 
-  updateEdgesWaypointPosition(positions: { [identifier: string]: { [identifier: string]: Position } }): void;
+  setEdgesWaypointPosition(positions: { [identifier: string]: Position[] }): void;
 
   removeEdges(identifier: string[]): void;
 
@@ -54,11 +58,11 @@ export interface DiagramActions {
 
   // Viewport
 
-  getView(): { position: Position, width: number, height: number };
+  getViewport(): { position: Position, width: number, height: number };
 
-  setViewToPosition(x: number, y: number): void;
+  setViewportToPosition(x: number, y: number): void;
 
-  centerViewToNode(identifier: string): void;
+  centerViewportToNode(identifier: string): void;
 
 }
 
@@ -119,7 +123,7 @@ export type Edge = {
 
   target: string;
 
-  waypoints: { position: Position }[];
+  initialWaypoints: { position: Position }[];
 
 }
 
