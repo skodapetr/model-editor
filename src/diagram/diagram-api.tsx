@@ -8,7 +8,7 @@ export interface DiagramActions {
   // Groups
 
   /**
-   * Returns the list of groups registered in diagram.
+   * @returns The list of groups registered in diagram.
    */
   getGroups(): Group[];
 
@@ -37,8 +37,9 @@ export interface DiagramActions {
 
 
   /**
-   * Returns the content of group as node identifiers.
+   * The content of group as node identifiers.
    * @param group is the group to get content for.
+   * @returns The content of group as node identifiers.
    */
   getGroupContent(group: Group): string[];
 
@@ -46,7 +47,7 @@ export interface DiagramActions {
   // Nodes
 
   /**
-   * Returns the nodes registered inside diagram.
+   * @returns The nodes registered inside diagram.
    */
   getNodes(): Node[];
 
@@ -84,13 +85,13 @@ export interface DiagramActions {
   // TODO: Same as nodes, so just copy after feedback to the node documentation.
   getEdges(): Edge[];
 
-  addEdges(edge: Edge[]): void;
+  addEdges(edges: Edge[]): void;
 
-  updateEdges(edge: Edge[]): void;
+  updateEdges(edges: Edge[]): void;
 
   setEdgesWaypointPosition(positions: { [identifier: string]: Position[] }): void;
 
-  removeEdges(identifier: string[]): void;
+  removeEdges(identifiers: string[]): void;
 
 
   // Selection
