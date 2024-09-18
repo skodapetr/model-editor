@@ -315,8 +315,7 @@ const createActions = (
     },
 
     getViewport() {
-      const reactFlowInstance = useReactFlow();
-      const viewport = reactFlowInstance.getViewport();
+      const viewport = reactFlow.getViewport();
       // I have zero idea why is it switched, but it is
       const position = { x: -viewport.x, y: -viewport.y };
       const flow__viewport = document.querySelector(".react-flow__viewport") as HTMLElement | null;
