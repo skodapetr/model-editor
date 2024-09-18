@@ -20,10 +20,11 @@ import {
   type OnConnectEnd,
   type IsValidConnection,
   FinalConnectionState,
+  Viewport,
 } from "@xyflow/react";
 
 import { UseDiagramType } from "./diagram-hook";
-import { DiagramActions, DiagramCallbacks, Node as ApiNode, Edge as ApiEdge } from "./diagram-api";
+import { DiagramActions, DiagramCallbacks, Node as ApiNode, Edge as ApiEdge, ViewportDimensions } from "./diagram-api";
 import { EdgeData, NodeData } from "./diagram-internal-model";
 import { EdgeToolbarProps } from "./edge/edge-toolbar";
 import { EntityNodeName } from "./node/entity-node";
@@ -302,18 +303,41 @@ const createActions = (
       setEdges(edges.map(edgeToEdgeType));
       console.log("Diagram.setContent", { nodes, edges });
     },
-    setViewToPosition(x, y) {
+    setViewportToPosition(x, y) {
       console.log("Diagram.setViewToPosition", { x, y });
     },
-    centerViewToNode(identifier) {
+    centerViewportToNode(identifier) {
       console.log("Diagram.focusNode", { identifier });
       const node = reactFlow.getNode(identifier);
       if (node !== undefined) {
         focusNodeAction(reactFlow, node);
       }
     },
+
+    getViewport() {
+      const reactFlowInstance = useReactFlow();
+      const viewport = reactFlowInstance.getViewport();
+      // I have zero idea why is it switched, but it is
+      const position = { x: -viewport.x, y: -viewport.y };
+      const flow__viewport = document.querySelector(".react-flow__viewport") as HTMLElement | null;
+      const viewportDimensionsToReturn = {
+          position,
+          width: (flow__viewport?.clientWidth ?? 0),
+          height: (flow__viewport?.clientHeight ?? 0)
+      };
+      convertViewUsingZoom(viewportDimensionsToReturn, viewport.zoom);
+      return viewportDimensionsToReturn;
+    },
   };
 }
+
+const convertViewUsingZoom = (view: ViewportDimensions, zoom: number): void => {
+  const zoomReciprocal = 1 / zoom;
+  view.position.x *= zoomReciprocal;
+  view.position.y *= zoomReciprocal;
+  view.width *= zoomReciprocal;
+  view.height *= zoomReciprocal;
+};
 
 const nodeToNodeType = (node: ApiNode): NodeType => {
   return {

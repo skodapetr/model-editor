@@ -136,7 +136,7 @@ export interface DiagramActions {
   /**
    * @returns The current position of viewport and its width and height.
    */
-  getViewport(): { position: Position, width: number, height: number };
+  getViewport(): ViewportDimensions;
 
 
   /**
@@ -152,6 +152,13 @@ export interface DiagramActions {
    * @param identifier is the identifier of the node to center viewport to.
    */
   centerViewportToNode(identifier: string): void;
+}
+
+
+export type ViewportDimensions = {
+  position: Position;
+  width: number;
+  height: number;
 }
 
 
