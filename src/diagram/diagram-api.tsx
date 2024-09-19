@@ -14,7 +14,7 @@ export interface DiagramActions {
 
 
   /**
-   * Registers new group to the diagram.
+   * Registers new {@link group} to the diagram.
    * @param group is the group to be registered.
    * @param content is optional content of the group.
    */
@@ -29,7 +29,7 @@ export interface DiagramActions {
 
 
   /**
-   * Sets the content of given group to given content.
+   * Sets the content of given {@link group} to given {@link content}.
    * @param group is the group to set content for.
    * @param content is the new content of the group.
    */
@@ -37,7 +37,7 @@ export interface DiagramActions {
 
 
   /**
-   * The content of group as node identifiers.
+   * The content of {@link group} as node identifiers.
    * @param group is the group to get content for.
    * @returns The content of group as node identifiers.
    */
@@ -53,7 +53,7 @@ export interface DiagramActions {
 
 
   /**
-   * Adds given nodes to the diagram.
+   * Adds given {@link nodes} to the diagram.
    * @param nodes is the list of nodes to be added to the diagram.
    */
   addNodes(nodes: Node[]): void;
@@ -103,7 +103,7 @@ export interface DiagramActions {
 
 
   /**
-   * Sets diagram's node selection to the given nodes.
+   * Sets diagram's node selection to the given {@link nodes}.
    * @param nodes are the identifiers of the nodes,
    * which will become the new content of the node selection.
    */
