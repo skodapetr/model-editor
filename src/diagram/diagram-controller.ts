@@ -20,7 +20,6 @@ import {
   type OnConnectEnd,
   type IsValidConnection,
   FinalConnectionState,
-  Viewport,
 } from "@xyflow/react";
 
 import { UseDiagramType } from "./diagram-hook";

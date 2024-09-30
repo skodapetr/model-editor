@@ -3,10 +3,6 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import {
   DiagramCallbacks,
   DiagramActions,
-  Edge,
-  Group,
-  Node,
-  Position,
   ViewportDimensions,
 } from "./diagram-api";
 
