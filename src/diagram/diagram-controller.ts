@@ -405,7 +405,7 @@ const edgeToEdgeType = (edge: ApiEdge): EdgeType => {
     target: edge.target,
     type: PropertyEdgeName,
     data: {
-      waypoints: edge.waypoints.map((waypoint) => ({
+      waypoints: edge.initialWaypoints.map((waypoint) => ({
         x: waypoint.position.x,
         y: waypoint.position.y
       })),
