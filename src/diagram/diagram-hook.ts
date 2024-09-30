@@ -58,6 +58,6 @@ const noOperationDiagramActions: DiagramActions = {
   updateEdges: () => { },
   removeEdges: () => { },
   setContent: async () => { },
-  setViewToPosition: () => { },
-  centerViewToNode: () => { },
+  setViewportToPosition: () => { },
+  centerViewportToNode: () => { },
 };
