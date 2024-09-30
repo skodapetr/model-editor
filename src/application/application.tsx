@@ -15,18 +15,21 @@ const nodes: Node[] = [
     initialPosition: { x: 110, y: 160 },
     label: "dcat:Catalog",
     items: [],
+    group: null,
   }, {
     identifier: "node-001",
     iri: "dcat:CatalogRecord",
     initialPosition: { x: 510, y: 160 },
     label: "dcat:CatalogRecord",
     items: [],
+    group: null,
   }, {
     identifier: "node-002",
     iri: "dcat-ap:Catalog",
     initialPosition: { x: 110, y: 350 },
     label: "dcat-ap:Catalog",
     items: [],
+    group: null,
   },
 ];
 
@@ -54,39 +57,40 @@ export function Application() {
   const callbacks = useMemo<DiagramCallbacks>(() => {
     return {
 
-      onShowNodeDetail: (id) => console.log("Application.onShowNodeDetail", {id}),
+      onShowNodeDetail: (id) => console.log("Application.onShowNodeDetail", { id }),
 
-      onEditNode: (id) => console.log("Application.onEditNode", {id}),
+      onEditNode: (id) => console.log("Application.onEditNode", { id }),
 
-      onCreateNodeProfile: (id) => console.log("Application.onCreateNodeProfile", {id}),
+      onCreateNodeProfile: (id) => console.log("Application.onCreateNodeProfile", { id }),
 
-      onHideNode: (id) => console.log("Application.onHideNode", {id}),
+      onHideNode: (id) => console.log("Application.onHideNode", { id }),
 
-      onDeleteNode: (id) => console.log("Application.onDeleteNode", {id}),
+      onDeleteNode: (id) => console.log("Application.onDeleteNode", { id }),
 
-      onShowEdgeDetail: (id) => console.log("Application.onShowEdgeDetail", {id}),
+      onShowEdgeDetail: (id) => console.log("Application.onShowEdgeDetail", { id }),
 
-      onEditEdge: (id) => console.log("Application.onEditEdge", {id}),
+      onEditEdge: (id) => console.log("Application.onEditEdge", { id }),
 
-      onCreateEdgeProfile: (id) => console.log("Application.onCreateEdgeProfile", {id}),
+      onCreateEdgeProfile: (id) => console.log("Application.onCreateEdgeProfile", { id }),
 
-      onHideEdge: (id) => console.log("Application.onHideEdge", {id}),
+      onHideEdge: (id) => console.log("Application.onHideEdge", { id }),
 
-      onDeleteEdge: (id) => console.log("Application.onDeleteEdge", {id}),
+      onDeleteEdge: (id) => console.log("Application.onDeleteEdge", { id }),
 
       onCreateConnectionToNode: (source, target) => {
-        console.log("Application.onCreateConnectionToNode", {source, target});
+        console.log("Application.onCreateConnectionToNode", { source, target });
         // As a default we just add an edge.
         diagram.actions().addEdges([{
           identifier: "edge-003",
           source,
           target,
           waypoints: [],
-
         }]);
       },
 
-      onCreateConnectionToNothing: (source, position) => console.log("Application.onCreateConnectionToNothing", {source, position}),
+      onCreateConnectionToNothing: (source, position) => console.log("Application.onCreateConnectionToNothing", { source, position }),
+
+      onSelectionDidChange: (nodes, edges) => console.log("Application.onSelectionDidChange", { nodes, edges }),
 
     };
   }, []);
@@ -115,6 +119,7 @@ export function Application() {
             initialPosition: { x: 510, y: 510 },
             label: "dcat-ap-cz:Catalog",
             items: [],
+            group: null,
           }]);
         }}>
           Add component
