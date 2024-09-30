@@ -38,7 +38,7 @@ const edges: Edge[] = [
     identifier: "edge-000",
     source: "node-000",
     target: "node-001",
-    waypoints: [
+    initialWaypoints: [
       { position: { x: 360, y: 170 } },
       { position: { x: 360, y: 60 } },
       { position: { x: 810, y: 60 } },
@@ -47,7 +47,7 @@ const edges: Edge[] = [
     identifier: "edge-001",
     source: "node-000",
     target: "node-002",
-    waypoints: [],
+    initialWaypoints: [],
   },
 ];
 
@@ -84,7 +84,7 @@ export function Application() {
           identifier: "edge-003",
           source,
           target,
-          waypoints: [],
+          initialWaypoints: [],
         }]);
       },
 

@@ -3,6 +3,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import {
   DiagramCallbacks,
   DiagramActions,
+  ViewportDimensions,
 } from "./diagram-api";
 
 export interface UseDiagramType {
@@ -60,4 +61,18 @@ const noOperationDiagramActions: DiagramActions = {
   setContent: async () => { },
   setViewportToPosition: () => { },
   centerViewportToNode: () => { },
+  getGroups: () => [],
+  addGroup: () => { },
+  removeGroups: () => { },
+  setGroup: () => { },
+  getGroupContent: () => [],
+  updateNodesPosition: () => { },
+  setEdgesWaypointPosition: () => { },
+  getSelectedNodes: () => [],
+  setSelectedNodes: () => { },
+  getSelectedEdges: () => [],
+  setSelectedEdges: () => { },
+  getViewport: function (): ViewportDimensions {
+    throw new Error("Function not implemented.");
+  }
 };
